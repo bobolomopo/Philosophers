@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:25 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 18:15:53 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/21 19:34:07 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ void	*routine(void *arg)
 //	printf("[timestamp : %d]philosophers %d thinking...\n", get_time(), i);	
 //	while (ph.max_eating >= 0)
 //	{
-		pthread_mutex_lock(&ph.forks[i - 1]);
-	usleep(500000);
-		printf("[timestamp : %d]philosophers %d eating...\n", get_time(), i);
-		pthread_mutex_unlock(&ph.forks[i - 1]);
+		pthread_mutex_lock(&ph.forks[2].fork);
+		usleep(500000);
+		printf("[timestamp : %d] philosophers %d eating...\n", get_time(), i);
+		pthread_mutex_unlock(&ph.forks[2].fork);
 		if (ph.is_limit > 0)
 			ph.max_eating--;
 //	}
@@ -49,6 +49,9 @@ void	*routine(void *arg)
 
 void	copy_struct(t_philo original, t_philo *new)
 {
+	int	i;
+
+	i = 0;
 	new->philo_nbr = original.philo_nbr;
 	new->fork_nbr = original.fork_nbr;
 	new->time_to_die = original.time_to_die;
@@ -56,6 +59,11 @@ void	copy_struct(t_philo original, t_philo *new)
 	new->time_to_sleep = original.time_to_sleep;
 	new->max_eating = original.max_eating;
 	new->forks = original.forks;
+	while (i < original.fork_nbr)
+	{
+		new->forks[i].fork = original.forks[i].fork;
+		i++;
+	}
 	new->is_limit = original.is_limit;
 }
 
@@ -74,12 +82,11 @@ int main(int argc, char **argv)
 		return (-1);
 	if (mutex_init(&ph) < 0)
 		return (-1);
-	while (i < ph.philo_nbr)
+	while (i < (int)ph.philo_nbr)
 	{
 		each_ph = malloc(sizeof(t_philo));
 		if (!each_ph)
 			return (-1);
-	//	printf("%d\n", i);
 		copy_struct(ph, each_ph);
 		each_ph->index = i + 1;
 		if (pthread_create(&ph.thread[i], NULL, &routine, each_ph) != 0)

@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 14:14:27 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 18:13:18 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/21 19:26:56 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,12 @@ int mutex_init(t_philo *ph)
 	int i;
 
 	i = 0;
-	ph->forks = malloc(sizeof(pthread_mutex_t *));
+	ph->forks = malloc(sizeof(t_forks) * ph->fork_nbr);
+	if (!ph->forks)
+		return (-1);
 	while (i < ph->fork_nbr)
 	{
-		pthread_mutex_init(&ph->forks[i], NULL);
+		pthread_mutex_init(&ph->forks[i].fork, NULL);
 		i++;
 	}
 	return (1);
@@ -82,7 +84,7 @@ int	mutex_destroy(t_philo *ph)
 	i = 0;
 	while (i < ph->fork_nbr)
 	{
-		pthread_mutex_destroy(&ph->forks[i]);
+		pthread_mutex_destroy(&ph->forks[i].fork);
 		i++;
 	}
 	free(ph->forks);

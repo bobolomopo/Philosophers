@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 18:01:11 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/21 19:27:46 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <stdio.h>
 # include <sys/time.h>
 
+typedef struct s_forks {
+	pthread_mutex_t fork;
+}	t_forks;
+
 typedef struct s_philo {
 	long			philo_nbr;
 	long			fork_nbr;
@@ -28,7 +32,7 @@ typedef struct s_philo {
 	long			max_eating;
 	int				is_limit;
 	pthread_t		*thread;
-	pthread_mutex_t *forks;
+	t_forks			*forks;
 	int				index;
 }	t_philo;
 

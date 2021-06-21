@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoll.c                                         :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 13:41:48 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 14:01:18 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/21 18:48:48 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static long	ft_negative(char c)
 
 int	ft_atol(const char *str)
 {
-	size_t			i;
-	long			neg;
-	unsigned long	retour;
+	size_t				i;
+	long				neg;
+	unsigned long long	retour;
 
 	i = 0;
 	neg = 1;
@@ -43,5 +43,5 @@ int	ft_atol(const char *str)
 		retour = retour * 10 + (str[i] - '0');
 		i++;
 	}
-	return (retour * neg);
+	return ((long)(retour) * neg);
 }
