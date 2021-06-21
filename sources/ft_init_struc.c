@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 14:14:27 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 14:26:05 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/21 18:13:18 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ int	init_struc(t_philo *ph, char **argv)
 	ph->time_to_die = ft_atol(argv[2]);
 	ph->time_to_eat = ft_atol(argv[3]);
 	ph->time_to_sleep = ft_atol(argv[4]);
+	ph->is_limit = 0;
 	if (argv[5])
 	{
 		if (ft_isnbr(argv[5]) < 0 || ft_strlen(argv[5]) > 10)
 			return (-1);
 		ph->max_eating = ft_atol(argv[5]);
+		ph->is_limit = 1;
 	}
 	else
 		ph->max_eating = 0;
@@ -56,5 +58,33 @@ int malloc_struc(t_philo *ph)
 			return (-1);
 		i++;
 	}
+	return (1);
+}
+
+int mutex_init(t_philo *ph)
+{
+	int i;
+
+	i = 0;
+	ph->forks = malloc(sizeof(pthread_mutex_t *));
+	while (i < ph->fork_nbr)
+	{
+		pthread_mutex_init(&ph->forks[i], NULL);
+		i++;
+	}
+	return (1);
+}
+
+int	mutex_destroy(t_philo *ph)
+{
+	int i;
+
+	i = 0;
+	while (i < ph->fork_nbr)
+	{
+		pthread_mutex_destroy(&ph->forks[i]);
+		i++;
+	}
+	free(ph->forks);
 	return (1);
 }
