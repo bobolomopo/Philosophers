@@ -2,7 +2,7 @@ NAME = philo
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 SRC_DIR = sources/
-SRCS = philo.c
+SRCS = philo.c ft_atol.c ft_isdigit.c ft_strlen.c ft_init_struc.c
 SRC =  $(addprefix $(SRC_DIR), $(SRCS))
 OBJ = $(SRC:.c=.o)
 

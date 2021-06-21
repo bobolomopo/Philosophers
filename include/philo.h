@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <Ajuln@hotmail.fr>                  +#+  +:+       +#+        */
+/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/19 14:56:52 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/21 14:25:46 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,25 @@
 # define PHILO_H
 # include <unistd.h>
 # include <stdlib.h>
+# include <pthread.h>
+# include <limits.h>
+# include <stdio.h>
 
 typedef struct s_philo {
-	int		philo_nbr;
-	int		fork_nbr;
-	int		time_to_die;
-	int		time_to_eat;
-	int		time_to_sleep;
-	int		max_eating;
+	long		philo_nbr;
+	long		fork_nbr;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	long		max_eating;
+	pthread_t	*thread;
 }	t_philo;
+
+int		ft_atol(const char *str);
+int		ft_isdigit(int c);
+int		ft_isnbr(char *str);
+size_t	ft_strlen(const char *str);
+int		init_struc(t_philo *ph, char **argv);
+int		malloc_struc(t_philo *ph);
 
 #endif
