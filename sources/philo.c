@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:25 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 19:34:07 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/21 19:59:38 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,43 @@ void	*routine(void *arg)
 
 	ph = *(t_philo *)arg;
 	i = ph.index;
-	last_meal = get_time();
-//	printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
-//	printf("[timestamp : %d]philosophers %d eating...\n", get_time(), i);
-//	printf("[timestamp : %d]philosophers %d sleeping...\n", get_time(), i);
-//	printf("[timestamp : %d]philosophers %d thinking...\n", get_time(), i);	
-//	while (ph.max_eating >= 0)
-//	{
-		pthread_mutex_lock(&ph.forks[2].fork);
-		usleep(500000);
-		printf("[timestamp : %d] philosophers %d eating...\n", get_time(), i);
-		pthread_mutex_unlock(&ph.forks[2].fork);
+
+	while (ph.max_eating >= 0)
+	{	
+		pthread_mutex_lock(&ph.forks[i - 1].fork);
+		if (i == 0)
+			pthread_mutex_lock(&ph.forks[ph.fork_nbr - 1].fork);
+		else
+			pthread_mutex_lock(&ph.forks[i - 2].fork);
+		
+		last_meal = get_time();
+		printf("[timestamp : %d] philosophers %d eating...\n", last_meal, i);
+		pthread_mutex_unlock(&ph.forks[i - 1].fork);
+		if (i == 0)
+			pthread_mutex_unlock(&ph.forks[ph.fork_nbr - 1].fork);
+		else
+			pthread_mutex_unlock(&ph.forks[i - 2].fork);
+		if (get_time() - last_meal > ph.time_to_die)
+		{
+			printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
+			break ;
+		}
+		printf("[timestamp : %d]philosophers %d sleeping...\n", get_time(), i);
+		usleep(ph.time_to_sleep);
+		if (get_time() - last_meal > ph.time_to_die)
+		{
+			printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
+			break ;
+		}
+		printf("[timestamp : %d]philosophers %d thinking...\n", get_time(), i);
+		if (get_time() - last_meal > ph.time_to_die)
+		{
+			printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
+			break ;
+		}
 		if (ph.is_limit > 0)
 			ph.max_eating--;
-//	}
+	}
 	free(arg);
 	return (NULL);
 }
