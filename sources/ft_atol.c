@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 13:41:48 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 18:48:48 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/23 15:17:05 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ int	ft_atol(const char *str)
 		retour = retour * 10 + (str[i] - '0');
 		i++;
 	}
-	return ((long)(retour) * neg);
+	return ((long)retour * neg);
 }
