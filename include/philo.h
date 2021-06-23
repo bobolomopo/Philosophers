@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/23 16:48:59 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/23 17:06:29 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,9 @@ int		get_time(void);
 void	*routine(void *arg);
 int		mutex_destroy(t_philo *ph);
 int		thread_error(int status);
+int		init(t_philo *ph, char **argv, int argc);
+int		wrong_arg(void);
+void	copy_struct(t_philo original, t_philo *new);
+int		closing_loop(t_philo ph);
 
 #endif
