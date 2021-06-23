@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/23 17:06:29 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/23 17:51:10 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <limits.h>
 # include <stdio.h>
 # include <sys/time.h>
+# include <errno.h>
 
 typedef struct s_forks {
 	pthread_mutex_t	fork;
