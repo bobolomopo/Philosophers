@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:25 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 19:59:38 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/23 14:39:25 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	*routine(void *arg)
 		
 		last_meal = get_time();
 		printf("[timestamp : %d] philosophers %d eating...\n", last_meal, i);
+		usleep(ph.time_to_eat * 1000);
 		pthread_mutex_unlock(&ph.forks[i - 1].fork);
 		if (i == 0)
 			pthread_mutex_unlock(&ph.forks[ph.fork_nbr - 1].fork);
@@ -51,7 +52,7 @@ void	*routine(void *arg)
 			break ;
 		}
 		printf("[timestamp : %d]philosophers %d sleeping...\n", get_time(), i);
-		usleep(ph.time_to_sleep);
+		usleep(ph.time_to_sleep * 1000);
 		if (get_time() - last_meal > ph.time_to_die)
 		{
 			printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
