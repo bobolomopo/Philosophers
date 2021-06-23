@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:25 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/23 14:39:25 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/23 15:03:08 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,13 @@ void	*routine(void *arg)
 {
 	int		i;
 	t_philo ph;
-	int				last_meal;
+	int		last_meal;
+	int		*res;
 
 	ph = *(t_philo *)arg;
 	i = ph.index;
 
-	while (ph.max_eating >= 0)
+	while (ph.max_eating > 0)
 	{	
 		pthread_mutex_lock(&ph.forks[i - 1].fork);
 		if (i == 0)
@@ -48,27 +49,29 @@ void	*routine(void *arg)
 			pthread_mutex_unlock(&ph.forks[i - 2].fork);
 		if (get_time() - last_meal > ph.time_to_die)
 		{
-			printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
+			printf("[timestamp : %d] philosophers %d died\n", get_time(), i);
 			break ;
 		}
-		printf("[timestamp : %d]philosophers %d sleeping...\n", get_time(), i);
+		printf("[timestamp : %d] philosophers %d sleeping...\n", get_time(), i);
 		usleep(ph.time_to_sleep * 1000);
 		if (get_time() - last_meal > ph.time_to_die)
 		{
-			printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
+			printf("[timestamp : %d] philosophers %d died\n", get_time(), i);
 			break ;
 		}
-		printf("[timestamp : %d]philosophers %d thinking...\n", get_time(), i);
+		printf("[timestamp : %d] philosophers %d thinking...\n", get_time(), i);
 		if (get_time() - last_meal > ph.time_to_die)
 		{
-			printf("[timestamp : %d]philosophers %d died\n", get_time(), i);
+			printf("[timestamp : %d] philosophers %d died\n", get_time(), i);
 			break ;
 		}
 		if (ph.is_limit > 0)
 			ph.max_eating--;
 	}
+	res = malloc(sizeof(int));
+	*res = 0;
 	free(arg);
-	return (NULL);
+	return ((void *)res);
 }
 
 void	copy_struct(t_philo original, t_philo *new)
@@ -96,6 +99,7 @@ int main(int argc, char **argv)
 	t_philo	ph;
 	t_philo	*each_ph;
 	int		i;
+	int		*res;
 
 	i = 0;
 	if (argc != 5 && argc != 6)
@@ -120,10 +124,18 @@ int main(int argc, char **argv)
 	i = 0;
 	while (i < ph.philo_nbr)
 	{
-		if (pthread_join(ph.thread[i], NULL) != 0)
+		if (pthread_join(ph.thread[i], (void **)&res) != 0)
 			return (-1);
+		if (*res == 0)
+		{
+			free(ph.thread);
+			mutex_destroy(&ph);
+			free(res);
+			return (0);
+		}
+		free(res);
 		i++;
 	}
-	mutex_destroy(&ph);
+	
 	return (0);
 }

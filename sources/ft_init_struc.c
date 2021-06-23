@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 14:14:27 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/21 19:26:56 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/23 15:00:00 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	init_struc(t_philo *ph, char **argv)
 		ph->is_limit = 1;
 	}
 	else
-		ph->max_eating = 0;
+		ph->max_eating = 1;
 	if (ph->philo_nbr > INT_MAX || ph->time_to_die > INT_MAX ||
 		ph->time_to_eat > INT_MAX || ph->time_to_sleep > INT_MAX ||
 		ph->max_eating > INT_MAX || ph->philo_nbr < 0 ||
@@ -48,16 +48,9 @@ int malloc_struc(t_philo *ph)
 	int i;
 
 	i = 0;
-	ph->thread = malloc(sizeof(pthread_t *));
+	ph->thread = malloc(sizeof(pthread_t) * ph->philo_nbr);
 	if (!ph->thread)
 		return (-1);
-	while (i < ph->philo_nbr)
-	{
-		ph->thread[i] = malloc(sizeof(pthread_t));
-		if (!ph->thread[i])
-			return (-1);
-		i++;
-	}
 	return (1);
 }
 
