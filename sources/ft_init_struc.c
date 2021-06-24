@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init_struc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 14:14:27 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/23 18:52:19 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/24 19:21:45 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ int	init_struc(t_philo *ph, char **argv)
 	ph->time_to_eat = ft_atol(argv[3]);
 	ph->time_to_sleep = ft_atol(argv[4]);
 	ph->is_limit = 0;
+	ph->how_many_ate = malloc(sizeof(long));
+	if (ph->how_many_ate)
+		return (-1);
+	*ph->how_many_ate = 0;
 	if (argv[5])
 	{
 		if (ft_isnbr(argv[5]) < 0 || ft_strlen(argv[5]) > 10)
@@ -60,9 +64,6 @@ int	init_struc(t_philo *ph, char **argv)
 
 int	malloc_struc(t_philo *ph)
 {
-	int		i;
-
-	i = 0;
 	ph->thread = malloc(sizeof(pthread_t) * ph->philo_nbr);
 	if (!ph->thread)
 		return (thread_error(2));

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_routine.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 15:27:39 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/23 19:15:39 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/24 19:21:02 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static void	locks(t_philo ph, int i, int status)
+void	locks(t_philo ph, int i, int status)
 {
 	if (status == 0)
 	{
@@ -36,66 +36,53 @@ static void	locks(t_philo ph, int i, int status)
 	return ;
 }
 
-static int	is_dead(int last_meal, t_philo ph, int i, int *res)
-{
-	if (get_time() - last_meal > ph.time_to_die)
-	{
-		printf("[%d] %d died\n", get_time(), i);
-		*res = -1;
-		return (-1);
-	}
-	return (1);
-}
-
-static void	sleep_eat(int activity, int last_meal, t_philo ph, int i)
-{
-	if (activity == 0)
-	{
-		printf("[%d] %d is eating\n", last_meal, i);
-		usleep(ph.time_to_eat * 1000);
-	}
-	if (activity == 1)
-	{
-		printf("[%d] %d is sleeping\n", get_time(), i);
-		usleep(ph.time_to_sleep * 1000);
-	}
-	return ;
-}
-
-static int	routine_loop(t_philo *ph, int i, int *res)
+static int	routine_loop(t_philo *ph, int i, int *ate)
 {
 	int	last_meal;
-
-	locks(*ph, i, 0);
+	
 	last_meal = get_time();
-	sleep_eat(0, last_meal, *ph, i);
-	locks(*ph, i, 1);
-	if (is_dead(last_meal, *ph, i, res) < 0)
+	if (thinking(*ph, i, last_meal) < 0)
 		return (-1);
-	sleep_eat(1, last_meal, *ph, i);
-	if (is_dead(last_meal, *ph, i, res) < 0)
+	if (eating(*ph, i, last_meal) < 0)
+		return (-1);
+	locks(*ph, i, 1);
+	*ate += 1;
+	if (*ate == ph->max_eating)
+		*ph->how_many_ate += 1;
+	if (*ph->how_many_ate == ph->philo_nbr && ph->is_limit == 1)
+		return (-1);
+	if (sleeping(*ph, i, last_meal) < 0)
 		return (-1);
 	printf("[%d] %d is thinking\n", get_time(), i);
-	if (ph->is_limit > 0)
-		ph->max_eating--;
 	return (1);
 }
 
 void	*routine(void *arg)
 {
-	int		i;
 	t_philo	ph;
+	int		i;
+	int		*ate;
 	int		*res;
 
 	ph = *(t_philo *)arg;
 	i = ph.index;
 	res = malloc(sizeof(int));
 	*res = 0;
-	while (ph.max_eating > 0)
+	ate = malloc(sizeof(int));
+	if (!ate)
+		return ((void *)res);
+	*ate = 0;
+	while (1)
 	{
-		if (routine_loop(&ph, i, res) < 0)
+		*res = routine_loop(&ph, i, ate);
+		if (*res < 0)
+		{
+			printf("[%d] %d died\n", get_time(), i);
 			break ;
+		}
 	}
 	free(arg);
+	free(ate);
+	printf("%d\n", *res);
 	return ((void *)res);
 }

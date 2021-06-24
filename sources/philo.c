@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:25 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/23 17:32:12 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/24 19:20:58 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	copy_struct(t_philo original, t_philo *new)
 	new->time_to_sleep = original.time_to_sleep;
 	new->max_eating = original.max_eating;
 	new->forks = original.forks;
+	new->how_many_ate = original.how_many_ate;
 	while (i < original.fork_nbr)
 	{
 		new->forks[i].fork = original.forks[i].fork;
@@ -64,6 +65,7 @@ int	main(int argc, char **argv)
 	i = 0;
 	if (closing_loop(ph) < 0)
 		return (-1);
+	free(ph.how_many_ate);
 	free(ph.thread);
 	mutex_destroy(&ph);
 	return (0);

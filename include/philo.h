@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/23 17:51:10 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/24 19:21:08 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philo {
 	long			time_to_eat;
 	long			time_to_sleep;
 	long			max_eating;
+	long			*how_many_ate;
 	int				is_limit;
 	pthread_t		*thread;
 	t_forks			*forks;
@@ -52,5 +53,9 @@ int		init(t_philo *ph, char **argv, int argc);
 int		wrong_arg(void);
 void	copy_struct(t_philo original, t_philo *new);
 int		closing_loop(t_philo ph);
+int		sleeping(t_philo ph, int i, int last_meal);
+int		eating(t_philo ph, int i, int last_meal);
+int		thinking(t_philo ph, int i, int last_meal);
+void	locks(t_philo ph, int i, int status);
 
 #endif
