@@ -6,35 +6,11 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 15:27:39 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 14:44:33 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 15:31:15 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-void	locks(t_philo ph, int i, int status)
-{
-	if (status == 0)
-	{
-		if (i % 2 == 0)
-			pthread_mutex_lock(&ph.forks[i - 1].fork);
-		else
-			pthread_mutex_lock(&ph.forks[i % ph.fork_nbr].fork);
-		printf("[%d] %d has taken a fork\n", get_time(), i);
-		if (i % 2 == 0)
-			pthread_mutex_lock(&ph.forks[i % ph.fork_nbr].fork);
-		else
-			pthread_mutex_lock(&ph.forks[i - 1].fork);
-		printf("[%d] %d has taken a fork\n", get_time(), i);
-		return ;
-	}
-	if (status == 1)
-	{
-		pthread_mutex_unlock(&ph.forks[i - 1].fork);
-		pthread_mutex_unlock(&ph.forks[i % ph.fork_nbr].fork);
-	}
-	return ;
-}
 
 static int	routine_loop(t_philo *ph, int i, int *ate, int *last_meal)
 {
@@ -45,27 +21,46 @@ static int	routine_loop(t_philo *ph, int i, int *ate, int *last_meal)
 	*last_meal = get_time();
 	if (eating(*ph, i, *last_meal) < 0)
 		return (-1);
-	locks(*ph, i, 1);
+	pthread_mutex_unlock(&ph->forks[i - 1].fork);
+	pthread_mutex_unlock(&ph->forks[i % ph->fork_nbr].fork);
 	*ate += 1;
 	if ((*ph->how_many_ate == ph->philo_nbr && ph->is_limit == 1)
 		|| *ph->is_dead > 0)
 		return (-2);
 	if (sleeping(*ph, i, *last_meal) < 0)
 		return (-1);
-	printf("[%d] %d is thinking\n", get_time(), i);
+	printf("[%d] %d is thinking\n", get_time() - ph->initial_time, i);
 	return (1);
 }
-static int	cond_loop(int *res, t_philo *ph)
+
+static int	cond_loop(int *res, t_philo *ph, int i)
 {
 	if (*res < 0)
 	{
 		if (*res == -1)
 		{
+			printf("[%d] %d died\n", get_time() - ph->initial_time, i);
 			*ph->is_dead += 1;
-			return (-1);
 		}
+		return (-1);
 	}
 	return (1);
+}
+
+static void	free_all(int *ate, int *last_meal, void *arg)
+{
+	free(ate);
+	free(last_meal);
+	free(arg);
+	return ;
+}
+
+static void	init_values_routine(int *res, int *last_meal, int *ate)
+{
+	*res = 0;
+	*last_meal = get_time();
+	*ate = 1;
+	return ;
 }
 
 void	*routine(void *arg)
@@ -83,20 +78,15 @@ void	*routine(void *arg)
 	last_meal = malloc(sizeof(int));
 	if (!ate || !res || !last_meal)
 		return ((void *)res);
-	*res = 0;
-	*last_meal = get_time();
-	*ate = 1;
+	init_values_routine(res, last_meal, ate);
 	while (1)
 	{
 		if (*ph.is_dead > 0)
 			break ;
 		*res = routine_loop(&ph, i, ate, last_meal);
-		if (cond_loop(res, &ph) < 0)
+		if (cond_loop(res, &ph, i) < 0)
 			break ;
 	}
-	printf("[%d] %d died\n", get_time(), i);
-	free(arg);
-	free(ate);
-	free(last_meal);
+	free_all(ate, last_meal, arg);
 	return ((void *)res);
 }
