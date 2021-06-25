@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
+/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/24 19:21:08 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 13:42:07 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_philo {
 	long			time_to_sleep;
 	long			max_eating;
 	long			*how_many_ate;
+	int				*is_dead;
 	int				is_limit;
 	pthread_t		*thread;
 	t_forks			*forks;

@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 16:36:23 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 12:38:47 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 13:47:54 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	closing_loop(t_philo ph)
 		if (*res == -1)
 		{
 			free(ph.how_many_ate);
+			free(ph.is_dead);
 			free(ph.thread);
 			mutex_destroy(&ph);
 			free(res);

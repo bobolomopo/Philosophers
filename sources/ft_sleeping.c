@@ -5,7 +5,7 @@ int	eating(t_philo ph, int i, int last_meal)
 	long long time;
 
 	time = 0;
-	printf("[%d] %d is eating\n", last_meal, i);
+	printf("[%d] %d is eating\n", get_time(), i);
 	while (time < ph.time_to_eat && get_time() - last_meal < ph.time_to_die)
 	{
 		usleep(10000);
@@ -22,7 +22,7 @@ int	sleeping(t_philo ph, int i, int last_meal)
 	long long time;
 
 	time = 0;
-	printf("[%d] %d is sleeping\n", last_meal, i);
+	printf("[%d] %d is sleeping\n", get_time(), i);
 	while (time < ph.time_to_sleep && get_time() - last_meal < ph.time_to_die)
 	{
 		usleep(10000);

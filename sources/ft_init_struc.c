@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 14:14:27 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 13:05:14 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 13:43:06 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ int	init_struc(t_philo *ph, char **argv)
 	ph->time_to_sleep = ft_atol(argv[4]);
 	ph->is_limit = 0;
 	ph->how_many_ate = malloc(sizeof(long));
-	if (!ph->how_many_ate)
+	ph->is_dead = malloc(sizeof(int));
+	if (!ph->how_many_ate || !ph->is_dead)
 		return (-1);
+	*ph->is_dead = 0;
 	*ph->how_many_ate = 0;
 	if (argv[5])
 	{

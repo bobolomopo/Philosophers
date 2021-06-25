@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:25 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 13:05:03 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 13:47:42 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	copy_struct(t_philo original, t_philo *new)
 	new->max_eating = original.max_eating;
 	new->forks = original.forks;
 	new->how_many_ate = original.how_many_ate;
+	new->is_dead = original.is_dead;
 	while (i < original.fork_nbr)
 	{
 		new->forks[i].fork = original.forks[i].fork;
@@ -66,6 +67,7 @@ int	main(int argc, char **argv)
 	if (closing_loop(ph) < 0)
 		return (-1);
 	free(ph.how_many_ate);
+	free(ph.is_dead);
 	free(ph.thread);
 	mutex_destroy(&ph);
 	return (0);
