@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_routine.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
+/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 15:27:39 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/24 19:21:02 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 12:46:03 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ static int	routine_loop(t_philo *ph, int i, int *ate)
 		return (-1);
 	locks(*ph, i, 1);
 	*ate += 1;
-	if (*ate == ph->max_eating)
+	if (*ate + 1 == ph->max_eating)
 		*ph->how_many_ate += 1;
 	if (*ph->how_many_ate == ph->philo_nbr && ph->is_limit == 1)
-		return (-1);
+		return (-2);
 	if (sleeping(*ph, i, last_meal) < 0)
 		return (-1);
 	printf("[%d] %d is thinking\n", get_time(), i);
@@ -77,12 +77,12 @@ void	*routine(void *arg)
 		*res = routine_loop(&ph, i, ate);
 		if (*res < 0)
 		{
-			printf("[%d] %d died\n", get_time(), i);
+			if (*res == -1)
+				printf("[%d] %d died\n", get_time(), i);
 			break ;
 		}
 	}
 	free(arg);
 	free(ate);
-	printf("%d\n", *res);
 	return ((void *)res);
 }
