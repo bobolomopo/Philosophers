@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 15:27:39 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 12:46:03 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 13:06:57 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ static int	routine_loop(t_philo *ph, int i, int *ate)
 {
 	int	last_meal;
 	
+	if (*ate == ph->max_eating)
+		*ph->how_many_ate += 1;
 	last_meal = get_time();
 	if (thinking(*ph, i, last_meal) < 0)
 		return (-1);
@@ -47,8 +49,6 @@ static int	routine_loop(t_philo *ph, int i, int *ate)
 		return (-1);
 	locks(*ph, i, 1);
 	*ate += 1;
-	if (*ate + 1 == ph->max_eating)
-		*ph->how_many_ate += 1;
 	if (*ph->how_many_ate == ph->philo_nbr && ph->is_limit == 1)
 		return (-2);
 	if (sleeping(*ph, i, last_meal) < 0)
@@ -67,11 +67,11 @@ void	*routine(void *arg)
 	ph = *(t_philo *)arg;
 	i = ph.index;
 	res = malloc(sizeof(int));
-	*res = 0;
 	ate = malloc(sizeof(int));
-	if (!ate)
+	if (!ate || !res)
 		return ((void *)res);
-	*ate = 0;
+	*res = 0;
+	*ate = 1;
 	while (1)
 	{
 		*res = routine_loop(&ph, i, ate);

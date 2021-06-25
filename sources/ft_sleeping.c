@@ -31,9 +31,7 @@ int	sleeping(t_philo ph, int i, int last_meal)
 	if (get_time() - last_meal < ph.time_to_die)
 		return (1);
 	else
-	{
 		return (-1);
-	}
 }
 
 int	thinking(t_philo ph, int i, int last_meal)
