@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/21 14:14:27 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 19:09:42 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 19:30:55 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	init_struct_cond(char **argv, t_philo *ph, int cond)
 	{
 		if (ph->philo_nbr > INT_MAX || ph->time_to_die > INT_MAX
 			|| ph->time_to_eat > INT_MAX || ph->time_to_sleep > INT_MAX
-			|| ph->max_eating > INT_MAX || ph->time_to_die < 0 
+			|| ph->max_eating > INT_MAX || ph->time_to_die < 0
 			|| ph->time_to_eat < 0 || ph->time_to_sleep < 0
 			|| ph->max_eating < 0)
 			return (-1);

@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 15:43:41 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 19:07:00 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 19:31:08 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	sleeping(t_philo ph, int i, int last_meal)
 
 	time = get_time();
 	printf("[%d] %d is sleeping\n", (get_time() - ph.initial_time), i);
-	while (get_time() - time < ph.time_to_sleep && get_time() - last_meal < ph.time_to_die)
+	while (get_time() - time < ph.time_to_sleep
+		&& get_time() - last_meal < ph.time_to_die)
 		usleep(10000);
 	if (get_time() - last_meal < ph.time_to_die)
 		return (1);
