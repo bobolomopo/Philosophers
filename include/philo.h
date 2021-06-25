@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 13:42:07 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 19:06:55 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_philo {
 	long			*how_many_ate;
 	int				*is_dead;
 	int				is_limit;
+	int				initial_time;
 	pthread_t		*thread;
 	t_forks			*forks;
 	int				index;
@@ -55,8 +56,8 @@ int		wrong_arg(void);
 void	copy_struct(t_philo original, t_philo *new);
 int		closing_loop(t_philo ph);
 int		sleeping(t_philo ph, int i, int last_meal);
-int		eating(t_philo ph, int i, int last_meal);
+int		eating(t_philo ph, int i, int *last_meal);
 int		thinking(t_philo ph, int i, int last_meal);
-void	locks(t_philo ph, int i, int status);
+int		init_values(t_philo *ph, char **argv);
 
 #endif

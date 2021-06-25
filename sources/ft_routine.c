@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 15:27:39 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 15:31:15 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 19:06:47 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ static int	routine_loop(t_philo *ph, int i, int *ate, int *last_meal)
 		*ph->how_many_ate += 1;
 	if (thinking(*ph, i, *last_meal) < 0)
 		return (-1);
-	*last_meal = get_time();
-	if (eating(*ph, i, *last_meal) < 0)
+	if (eating(*ph, i, last_meal) < 0)
 		return (-1);
 	pthread_mutex_unlock(&ph->forks[i - 1].fork);
 	pthread_mutex_unlock(&ph->forks[i % ph->fork_nbr].fork);

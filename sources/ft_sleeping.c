@@ -6,40 +6,31 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 15:43:41 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 15:44:17 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/25 19:07:00 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-int	eating(t_philo ph, int i, int last_meal)
+int	eating(t_philo ph, int i, int *last_meal)
 {
-	long	time;
+	int	time;
 
-	time = 0;
+	time = get_time();
 	printf("[%d] %d is eating\n", (get_time() - ph.initial_time), i);
-	while (time < ph.time_to_eat && get_time() - last_meal < ph.time_to_die)
-	{
-		usleep(10000);
-		time += 10;
-	}
-	if (get_time() - last_meal < ph.time_to_die)
-		return (1);
-	else
-		return (-1);
+	usleep(ph.time_to_eat * 1000);
+	*last_meal = get_time();
+	return (1);
 }
 
 int	sleeping(t_philo ph, int i, int last_meal)
 {
-	long	time;
+	int	time;
 
-	time = 0;
+	time = get_time();
 	printf("[%d] %d is sleeping\n", (get_time() - ph.initial_time), i);
-	while (time < ph.time_to_sleep && get_time() - last_meal < ph.time_to_die)
-	{
+	while (get_time() - time < ph.time_to_sleep && get_time() - last_meal < ph.time_to_die)
 		usleep(10000);
-		time += 10;
-	}
 	if (get_time() - last_meal < ph.time_to_die)
 		return (1);
 	else
