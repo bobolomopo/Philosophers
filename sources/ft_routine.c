@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_routine.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 15:27:39 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 19:25:33 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/29 16:36:22 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,25 @@
 
 static int	routine_loop(t_philo *ph, int i, int *ate, int *last_meal)
 {
-	if (*ate == ph->max_eating)
-		*ph->how_many_ate += 1;
-	if (thinking(*ph, i, *last_meal) < 0)
-		return (-1);
-	if (eating(*ph, i, last_meal) < 0)
-		return (-1);
+	int res;
+
+	res = thinking(*ph, i, *last_meal);
+	if (res < 0)
+		return (res);
+	res = eating(*ph, i, last_meal);
+	*ate += 1;
+	if (res < 0)
+		return (res);
 	pthread_mutex_unlock(&ph->forks[i - 1].fork);
 	pthread_mutex_unlock(&ph->forks[i % ph->fork_nbr].fork);
-	*ate += 1;
+	if (*ate == ph->max_eating)
+		*ph->how_many_ate += 1;
 	if ((*ph->how_many_ate == ph->philo_nbr && ph->is_limit == 1)
 		|| *ph->is_dead > 0)
 		return (-2);
-	if (sleeping(*ph, i, *last_meal) < 0)
-		return (-1);
-	printf("[%d] %d is thinking\n", get_time() - ph->initial_time, i);
+	res = sleeping(*ph, i, *last_meal);
+	if (res < 0)
+		return (res);
 	return (1);
 }
 
@@ -38,7 +42,8 @@ static int	cond_loop(int *res, t_philo *ph, int i)
 	{
 		if (*res == -1)
 		{
-			printf("[%d] %d died\n", get_time() - ph->initial_time, i);
+			if (*ph->is_dead == 0)
+				printf("[%d] %d died\n", get_time() - ph->initial_time, i);
 			*ph->is_dead += 1;
 		}
 		return (-1);
@@ -78,6 +83,7 @@ void	*routine(void *arg)
 	if (!ate || !res || !last_meal)
 		return ((void *)res);
 	init_values_routine(res, last_meal, ate);
+	printf("[%d] %d initial time\n", (get_time() - ph.initial_time), i);
 	while (1)
 	{
 		if (*ph.is_dead > 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_sleeping.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jandre <ajuln@hotmail.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/25 15:43:41 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 19:31:08 by jandre           ###   ########.fr       */
+/*   Updated: 2021/06/29 16:32:07 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 
 int	eating(t_philo ph, int i, int *last_meal)
 {
-	int	time;
-
-	time = get_time();
-	printf("[%d] %d is eating\n", (get_time() - ph.initial_time), i);
-	usleep(ph.time_to_eat * 1000);
-	*last_meal = get_time();
+	if (get_time() - *last_meal > ph.time_to_die)
+		return (-1);
+	if (*ph.is_dead == 0)
+	{
+		printf("[%d] %d is eating\n", (get_time() - ph.initial_time), i);
+		usleep(ph.time_to_eat * 1000);
+		*last_meal = get_time();
+	}
+	else
+		return (-2);
 	return (1);
 }
 
@@ -28,65 +32,51 @@ int	sleeping(t_philo ph, int i, int last_meal)
 	int	time;
 
 	time = get_time();
-	printf("[%d] %d is sleeping\n", (get_time() - ph.initial_time), i);
-	while (get_time() - time < ph.time_to_sleep
-		&& get_time() - last_meal < ph.time_to_die)
-		usleep(10000);
-	if (get_time() - last_meal < ph.time_to_die)
-		return (1);
-	else
-		return (-1);
-}
-
-static int	first_fork(t_philo ph, int i, int last_meal)
-{
-	if (i % 2 == 0)
+	if (*ph.is_dead == 0)
 	{
-		while (pthread_mutex_trylock(&ph.forks[i - 1].fork) != 0)
+		printf("[%d] %d is sleeping\n", (get_time() - ph.initial_time), i);
+		while (get_time() - time < ph.time_to_sleep
+			&& get_time() - last_meal < ph.time_to_die)
+			usleep(10000);
+		if (get_time() - last_meal < ph.time_to_die)
 		{
-			if (get_time() - last_meal > ph.time_to_die)
-				return (-1);
+			if (*ph.is_dead == 0)
+				printf("[%d] %d is thinking\n", get_time() - ph.initial_time, i);
+			return (1);
 		}
+		else
+			return (-1);
 	}
 	else
-	{
-		while (pthread_mutex_trylock(&ph.forks[i % ph.fork_nbr].fork) != 0)
-		{
-			if (get_time() - last_meal > ph.time_to_die)
-				return (-1);
-		}
-	}
-	printf("[%d] %d has taken a fork\n", (get_time() - ph.initial_time), i);
-	return (1);
-}
-
-static int	second_fork(t_philo ph, int i, int last_meal)
-{
-	if (i % 2 == 0)
-	{
-		while (pthread_mutex_trylock(&ph.forks[i % ph.fork_nbr].fork) != 0)
-		{
-			if (get_time() - last_meal > ph.time_to_die)
-				return (-1);
-		}
-	}
-	else
-	{
-		while (pthread_mutex_trylock(&ph.forks[i - 1].fork) != 0)
-		{
-			if (get_time() - last_meal > ph.time_to_die)
-				return (-1);
-		}
-	}
-	printf("[%d] %d has taken a fork\n", (get_time() - ph.initial_time), i);
-	return (1);
+		return (-2);
 }
 
 int	thinking(t_philo ph, int i, int last_meal)
 {
-	if (first_fork(ph, i, last_meal) < 0)
+	int fork_one;
+	int	fork_two;
+
+	fork_one = 1;
+	fork_two = 1;
+	while (get_time() - last_meal < ph.time_to_die)
+	{
+		fork_one = pthread_mutex_trylock(&ph.forks[i - 1].fork);
+		fork_two = pthread_mutex_trylock(&ph.forks[i % ph.fork_nbr].fork);
+		if (fork_one == 0 && fork_two == 0)
+			break ;
+		if (fork_one == 0)
+			pthread_mutex_unlock(&ph.forks[i - 1].fork);
+		if (fork_two == 0)
+			pthread_mutex_unlock(&ph.forks[i % ph.fork_nbr].fork);
+	}
+	if (get_time() - last_meal > ph.time_to_die)
 		return (-1);
-	if (second_fork(ph, i, last_meal) < 0)
-		return (-1);
-	return (1);
+	if (*ph.is_dead == 0)
+	{
+		printf("[%d] %d has taken a fork\n", (get_time() - ph.initial_time), i);
+		printf("[%d] %d has taken a fork\n", (get_time() - ph.initial_time), i);
+		return (1);
+	}
+	else
+		return (-2);
 }
