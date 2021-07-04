@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/06/25 19:06:55 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/04 16:49:15 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@
 # include <limits.h>
 # include <stdio.h>
 # include <sys/time.h>
-# include <errno.h>
 
-typedef struct s_forks {
-	pthread_mutex_t	fork;
-}	t_forks;
+typedef struct s_mutex {
+	pthread_mutex_t	mutex;
+}	t_mutex;
 
 typedef struct s_philo {
 	long			philo_nbr;
@@ -33,10 +32,15 @@ typedef struct s_philo {
 	long			max_eating;
 	long			*how_many_ate;
 	int				*is_dead;
+	int				*last_meal_time;
+	int				*start;
+	int				*start_check;
 	int				is_limit;
-	int				initial_time;
+	int				*initial_time;
+	t_mutex			*display_m;
 	pthread_t		*thread;
-	t_forks			*forks;
+	pthread_t		*check_die;
+	t_mutex			*forks;
 	int				index;
 }	t_philo;
 
@@ -44,20 +48,18 @@ int		ft_atol(const char *str);
 int		ft_isdigit(int c);
 int		ft_isnbr(char *str);
 size_t	ft_strlen(const char *str);
-int		init_struc(t_philo *ph, char **argv);
-int		malloc_struc(t_philo *ph);
-int		mutex_init(t_philo *ph);
-int		get_time(void);
-void	*routine(void *arg);
-int		mutex_destroy(t_philo *ph);
-int		thread_error(int status);
+int		init_mem_val(t_philo *ph, char **argv, int argc);
 int		init(t_philo *ph, char **argv, int argc);
-int		wrong_arg(void);
-void	copy_struct(t_philo original, t_philo *new);
-int		closing_loop(t_philo ph);
-int		sleeping(t_philo ph, int i, int last_meal);
-int		eating(t_philo ph, int i, int *last_meal);
-int		thinking(t_philo ph, int i, int last_meal);
-int		init_values(t_philo *ph, char **argv);
+int		closing(t_philo ph);
+int		create_thread(t_philo ph);
+int		get_time(void);
+void	ft_putchar(char c);
+void	ft_putnbr(int nb);
+int		thinking(t_philo ph, int i, int ate);
+int		eating(t_philo ph, int i, int *ate);
+int		sleeping(t_philo ph, int i);
+void	display_message(int status, t_philo ph, int i);
+void	*routine(void *arg);
+void	*check_die(void *arg);
 
 #endif
