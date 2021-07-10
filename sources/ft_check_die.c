@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 13:34:19 by jandre            #+#    #+#             */
-/*   Updated: 2021/07/04 18:46:53 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/10 15:36:16 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	*check_die(void *arg)
 
 	ph = *(t_philo *)arg;
 	i = ph.index;
-	while (*ph.start_check == 0)
-		usleep(1);
+	pthread_mutex_lock(&ph.checker[i - 1].mutex);
 	while (get_time() - ph.last_meal_time[i - 1] <= ph.time_to_die
 		&& *ph.is_dead == 0)
 	{
@@ -35,5 +34,6 @@ void	*check_die(void *arg)
 	}
 	if (*ph.how_many_ate == ph.philo_nbr)
 		*ph.is_dead += 1;
+	pthread_mutex_unlock(&ph.checker[i].mutex);
 	return (NULL);
 }

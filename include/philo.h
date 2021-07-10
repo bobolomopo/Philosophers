@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/19 14:56:52 by jandre            #+#    #+#             */
-/*   Updated: 2021/07/04 16:49:15 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/10 15:39:30 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ typedef struct s_philo {
 	int				*is_dead;
 	int				*last_meal_time;
 	int				*start;
-	int				*start_check;
 	int				is_limit;
 	int				*initial_time;
 	t_mutex			*display_m;
 	pthread_t		*thread;
 	pthread_t		*check_die;
 	t_mutex			*forks;
+	t_mutex			*checker;
 	int				index;
 }	t_philo;
 

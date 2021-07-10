@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 13:57:48 by jandre            #+#    #+#             */
-/*   Updated: 2021/07/04 16:51:28 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/10 15:33:19 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static int	mutex_init(t_philo *ph)
 
 	i = 0;
 	ph->forks = malloc(sizeof(t_mutex) * ph->fork_nbr);
+	ph->checker = malloc(sizeof(t_mutex) * ph->philo_nbr);
 	ph->display_m = malloc(sizeof(t_mutex));
 	pthread_mutex_init(&ph->display_m->mutex, NULL);
 	if (!ph->forks)
@@ -34,6 +35,7 @@ static int	mutex_init(t_philo *ph)
 	while (i < ph->fork_nbr)
 	{
 		pthread_mutex_init(&ph->forks[i].mutex, NULL);
+		pthread_mutex_init(&ph->checker[i].mutex, NULL);
 		i++;
 	}
 	return (1);

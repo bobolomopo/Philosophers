@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 13:51:41 by jandre            #+#    #+#             */
-/*   Updated: 2021/07/04 17:13:28 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/10 15:40:56 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ static int	init_values(t_philo *ph, char **argv)
 	ph->how_many_ate = malloc(sizeof(long));
 	ph->is_dead = malloc(sizeof(int));
 	ph->start = malloc(sizeof(int));
-	ph->start_check = malloc(sizeof(int));
 	ph->initial_time = malloc(sizeof(int));
 	if (!ph->how_many_ate || !ph->is_dead || !ph->start
-		|| !ph->initial_time || !ph->start_check)
+		|| !ph->initial_time)
 		return (-1);
 	*ph->start = 0;
-	*ph->start_check = 0;
 	*ph->is_dead = 0;
 	*ph->how_many_ate = 0;
 	return (1);

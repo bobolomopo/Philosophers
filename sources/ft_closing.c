@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 14:27:16 by jandre            #+#    #+#             */
-/*   Updated: 2021/07/04 16:50:10 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/10 15:41:32 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,12 @@ static void	mutex_destroy(t_philo *ph)
 	while (i < ph->fork_nbr)
 	{
 		pthread_mutex_destroy(&ph->forks[i].mutex);
+		pthread_mutex_destroy(&ph->checker[i].mutex);
 		i++;
 	}
 	free(ph->display_m);
 	free(ph->forks);
+	free(ph->checker);
 }
 
 static void	free_all(t_philo ph)
@@ -48,7 +50,6 @@ static void	free_all(t_philo ph)
 	free(ph.how_many_ate);
 	free(ph.is_dead);
 	free(ph.start);
-	free(ph.start_check);
 	free(ph.last_meal_time);
 	free(ph.check_die);
 	free(ph.thread);
