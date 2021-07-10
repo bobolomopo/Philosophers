@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/04 13:57:48 by jandre            #+#    #+#             */
-/*   Updated: 2021/07/10 15:33:19 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/10 15:57:16 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	mutex_init(t_philo *ph)
 	ph->checker = malloc(sizeof(t_mutex) * ph->philo_nbr);
 	ph->display_m = malloc(sizeof(t_mutex));
 	pthread_mutex_init(&ph->display_m->mutex, NULL);
-	if (!ph->forks)
+	if (!ph->forks || !ph->checker || !ph->display_m)
 		return (-1);
 	while (i < ph->fork_nbr)
 	{
