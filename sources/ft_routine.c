@@ -6,7 +6,7 @@
 /*   By: jandre <jandre@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/23 15:27:39 by jandre            #+#    #+#             */
-/*   Updated: 2021/07/10 15:36:23 by jandre           ###   ########.fr       */
+/*   Updated: 2021/07/10 15:44:35 by jandre           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	isolated(t_philo ph, int i, void *arg)
 {
 	if (ph.philo_nbr == 1)
 	{
+		pthread_mutex_unlock(&ph.checker[i - 1].mutex);
 		ft_putnbr(get_time() - *ph.initial_time);
 		write(1, " - ", 3);
 		ft_putnbr(i);
